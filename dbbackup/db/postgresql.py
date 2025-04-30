@@ -113,6 +113,7 @@ class PgDumpBinaryConnector(PgDumpConnector):
     single_transaction = True
     drop = True
     if_exists = False
+    pg_options = ""
 
     def _create_dump(self):
         cmd = f"{self.dump_cmd} "
@@ -131,7 +132,7 @@ class PgDumpBinaryConnector(PgDumpConnector):
 
     def _restore_dump(self, dump):
         dbname = create_postgres_uri(self)
-        cmd = f"{self.restore_cmd} {dbname}"
+        cmd = f"{self.restore_cmd} {self.pg_options} {dbname}"
 
         if self.single_transaction:
             cmd += " --single-transaction"

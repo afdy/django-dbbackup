@@ -223,6 +223,13 @@ class PgDumpBinaryConnectorTest(TestCase):
         self.connector.restore_dump(dump)
         self.assertIn(" --if-exists", mock_run_command.call_args[0][0])
 
+    def test_pg_options(self, mock_run_command):
+        # check when we are passed an option, it makes it to pg_restore cli
+        dump = self.connector.create_dump()
+        self.connector.pg_options = "--foo"
+        self.connector.restore_dump(dump)
+        self.assertIn("--foo", mock_run_command.call_args[0][0])
+
     @patch(
         "dbbackup.db.postgresql.PgDumpBinaryConnector.run_command",
         return_value=(BytesIO(), BytesIO()),
